@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import sys
+from pathlib import Path
+
+# Add the config directory to the Python path
+config_dir = Path.home() / '.config' / 'dorker'
+sys.path.insert(0, str(config_dir))
+
+from src.dorker import run_dorker_command, init_dorker, reload_dorker
+from src.docker import open_docker, setup_goinfre_docker
+
+def main():
+    if len(sys.argv) < 2:
+        run_dorker_command([])
+        return
+
+    command = sys.argv[1]
+    args = sys.argv[2:]
+
+    if command == "dorker":
+        run_dorker_command(args)
+    elif command == "dorker-init":
+        init_dorker()
+    elif command == "dorker-reload":
+        reload_dorker()
+    elif command == "dorker-open-docker":
+        open_docker()
+    elif command == "dorker-goinfre-docker":
+        setup_goinfre_docker()
+    else:
+        run_dorker_command([command] + args)
+
+if __name__ == "__main__":
+    main() 
