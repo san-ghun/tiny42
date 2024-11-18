@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fill in the directory name that contains all your 42 projects that you are working on
-DORKER_WORKSPACE=$HOME/Documents
+DORKER_WORKSPACE=$HOME/Projects/42berlin
 DORKER_ECHO_ON_STARTUP=1
 
 DORKER_GREEN='\033[0;32m' # Used for success messages
