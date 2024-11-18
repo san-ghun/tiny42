@@ -29,11 +29,28 @@ source ~/.zshrc  # or ~/.bashrc
 The default configuration can be found in `~/.config/dorker/src/settings.py`:
 
 ```python
+# Basic settings
 DORKER_WORKSPACE = os.path.join(os.environ['HOME'], 'Projects/42berlin')
 DORKER_ECHO_ON_STARTUP = True
+
+# Port publishing configuration
+DORKER_PORT_PUBLISHING = False  # Set to True to enable port publishing
+DORKER_PORT_PUBLISHING_HOST = 8080  # Port on your host machine
+DORKER_PORT_PUBLISHING_CONTAINER = 8080  # Port inside the container
 ```
 
 Modify `DORKER_WORKSPACE` to point to your project directory.
+
+### Port Publishing
+
+To enable port publishing between your host machine and the Docker container:
+
+1. Set `DORKER_PORT_PUBLISHING = True` in settings.py
+2. Configure the desired ports:
+   - `DORKER_PORT_PUBLISHING_HOST`: Port on your local machine
+   - `DORKER_PORT_PUBLISHING_CONTAINER`: Port inside the Docker container
+
+This is useful for web development or running services that need to be accessed from outside the container.
 
 ## Usage
 

@@ -1,9 +1,10 @@
 import os
 import time
 import subprocess
+from typing import List
 from .settings import *
 
-def open_docker():
+def open_docker() -> None:
     """Open Docker application and wait for it to start."""
     try:
         # Check if Docker is running
@@ -28,14 +29,14 @@ def open_docker():
                 time.sleep(1)
         print()
 
-def setup_goinfre_docker():
+def setup_goinfre_docker() -> None:
     """Setup Docker in goinfre directory."""
-    user = os.environ['USER']
-    docker_dest = f"/goinfre/{user}/docker"
+    user: str = os.environ['USER']
+    docker_dest: str = f"/goinfre/{user}/docker"
     
     # Check if Docker is already in goinfre
     if os.path.exists(docker_dest):
-        response = input(f"{DORKER_RED}Docker is already setup in {docker_dest}, "
+        response: str = input(f"{DORKER_RED}Docker is already setup in {docker_dest}, "
                         f"do you want to reset it? [y/N]{DORKER_WHITE}\n")
         if response.lower() == 'y':
             subprocess.run(['rm', '-rf', 
@@ -44,14 +45,14 @@ def setup_goinfre_docker():
                           f"{docker_dest}/.docker"])
 
     # Remove existing symlinks and directories
-    paths_to_clean = [
+    paths_to_clean: List[str] = [
         "~/Library/Containers/com.docker.docker",
         "~/Library/Containers/com.docker.helper",
         "~/.docker"
     ]
     
     for path in paths_to_clean:
-        expanded_path = os.path.expanduser(path)
+        expanded_path: str = os.path.expanduser(path)
         try:
             if os.path.islink(expanded_path):
                 os.unlink(expanded_path)
@@ -66,7 +67,7 @@ def setup_goinfre_docker():
     os.makedirs(f"{docker_dest}/.docker", exist_ok=True)
 
     # Create symlinks
-    links = [
+    links: List[tuple[str, str]] = [
         (f"{docker_dest}/com.docker.docker", "~/Library/Containers/com.docker.docker"),
         (f"{docker_dest}/com.docker.helper", "~/Library/Containers/com.docker.helper"),
         (f"{docker_dest}/.docker", "~/.docker")
