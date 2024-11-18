@@ -1,8 +1,8 @@
-# Dorker - Docker Development Environment Manager
+# tiny42 - Docker Development Environment Manager
 
 ## Overview
 
-Dorker is a Python-based tool that provides a consistent Docker environment for C/C++ development, particularly useful for 42 School projects. It allows developers to run Linux-specific tools (like valgrind and strace) on macOS through a seamless Docker interface.
+tiny42 is a Python-based tool that provides a consistent Docker environment for C/C++ development, particularly useful for 42 School projects. It allows developers to run Linux-specific tools (like valgrind and strace) on macOS through a seamless Docker interface.
 
 ## Key Features
 
@@ -17,10 +17,10 @@ Dorker is a Python-based tool that provides a consistent Docker environment for 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dorker.git
-cd dorker
+git clone https://github.com/yourusername/tiny42.git
+cd tiny42
 
-# Install Dorker
+# Install tiny42
 python3 install.py
 
 # Restart your terminal or source your configuration
@@ -29,27 +29,27 @@ source ~/.zshrc  # or ~/.bashrc
 
 ## Configuration
 
-The configuration file is located at `~/.config/dorker/src/settings.py`:
+The configuration file is located at `~/.config/tiny42/src/settings.py`:
 
 ```python
 # Workspace configuration
-DORKER_WORKSPACE = os.path.join(os.environ['HOME'], 'Projects/42berlin')
-DORKER_ECHO_ON_STARTUP = True
+TINY42_WORKSPACE = os.path.join(os.environ['HOME'], 'Projects/42berlin')
+TINY42_ECHO_ON_STARTUP = True
 
 # Port forwarding settings
-DORKER_PORT_PUBLISHING = False
-DORKER_PORT_PUBLISHING_HOST = 8080
-DORKER_PORT_PUBLISHING_CONTAINER = 8080
+TINY42_PORT_PUBLISHING = False
+TINY42_PORT_PUBLISHING_HOST = 8080
+TINY42_PORT_PUBLISHING_CONTAINER = 8080
 ```
 
 ### Port Publishing
 
 To enable port forwarding between your host machine and container:
 
-1. Set `DORKER_PORT_PUBLISHING = True`
+1. Set `TINY42_PORT_PUBLISHING = True`
 2. Configure ports:
-   - `DORKER_PORT_PUBLISHING_HOST`: Host machine port
-   - `DORKER_PORT_PUBLISHING_CONTAINER`: Container port
+   - `TINY42_PORT_PUBLISHING_HOST`: Host machine port
+   - `TINY42_PORT_PUBLISHING_CONTAINER`: Container port
 
 ## Usage
 
@@ -57,21 +57,21 @@ To enable port forwarding between your host machine and container:
 
 ```bash
 # Execute commands in container
-dorker <command>
+tiny42 <command>
 
 # Examples
-dorker make re
-dorker valgrind --leak-check=full ./program
-dorker gcc -Wall -Wextra -Werror main.c
+tiny42 make re
+tiny42 valgrind --leak-check=full ./program
+tiny42 gcc -Wall -Wextra -Werror main.c
 
 # Open shell in container
-dorker bash
+tiny42 bash
 
 # Management commands
-dorker-init           # Initialize container
-dorker-reload         # Rebuild container
-dorker-open-docker    # Start Docker daemon
-dorker-goinfre-docker # Setup Docker in goinfre (42 School)
+tiny42-init           # Initialize container
+tiny42-reload         # Rebuild container
+tiny42-open-docker    # Start Docker daemon
+tiny42-goinfre-docker # Setup Docker in goinfre (42 School)
 ```
 
 ### Development Environment
@@ -87,17 +87,17 @@ The container includes:
 ## Project Structure
 
 ```
-~/.config/dorker/
+~/.config/tiny42/
 ├── src/
 │   ├── __init__.py
 │   ├── settings.py    # Configuration
 │   ├── docker.py      # Docker operations
-│   ├── dorker.py      # Core functionality
+│   ├── tiny42.py      # Core functionality
 │   └── Dockerfile     # Container definition
 └── ...
 
 ~/.local/bin/
-└── dorker            # Main executable
+└── tiny42            # Main executable
 ```
 
 ## Uninstallation
@@ -116,28 +116,28 @@ python3 install.py --uninstall
 
 The codebase consists of several key components:
 
-1. Core functionality (referenced in `src/dorker.py`):
+1. Core functionality (referenced in `src/tiny42.py`):
 
 ```python
-# 9:59:src/dorker.py
+# 9:59:src/tiny42.py
 def _check_environment() -> bool:
     """Check if we're in the correct workspace and Docker is running."""
     current_path: str = os.getcwd()
 
-    if current_path == DORKER_WORKSPACE:
-        print(f"{DORKER_RED}You are not inside the workspace specified.{DORKER_WHITE}")
-        print(f"{DORKER_BLUE}Dorker can only be ran inside the specified workspace, "
-              f"currently it is set to \"{DORKER_WORKSPACE}\".{DORKER_WHITE}")
+    if current_path == TINY42_WORKSPACE:
+        print(f"{TINY42_RED}You are not inside the workspace specified.{TINY42_WHITE}")
+        print(f"{TINY42_BLUE}tiny42 can only be ran inside the specified workspace, "
+              f"currently it is set to \"{TINY42_WORKSPACE}\".{TINY42_WHITE}")
         return False
 
-    # Check if dorker container is running
+    # Check if tiny42 container is running
     try:
         output: str = subprocess.check_output(['docker', 'ps'], text=True)
-        if 'dorker' not in output:
+        if 'tiny42' not in output:
             # Check if image exists
             images: str = subprocess.check_output(['docker', 'images'], text=True)
-            if 'dorker' not in images:
-                init_dorker()
+            if 'tiny42' not in images:
+                init_tiny42()
             else:
                 run_cmd: List[str] = ['docker', 'run', '-itd']
                 port_mapping: Optional[str] = get_port_mapping()
@@ -145,8 +145,8 @@ def _check_environment() -> bool:
                     run_cmd.append(port_mapping)
 
                 run_cmd.extend([
-                    '-v', f'{DORKER_WORKSPACE}:/dorker_workspace',
-                    '--name=dorker', 'dorker'
+                    '-v', f'{TINY42_WORKSPACE}:/tiny42_workspace',
+                    '--name=tiny42', 'tiny42'
                 ])
 
                 subprocess.run(run_cmd)
@@ -154,21 +154,21 @@ def _check_environment() -> bool:
         return False
 
     return True
-def run_dorker_command(args: List[str]) -> None:
-    """Run a command inside the dorker container."""
+def run_tiny42_command(args: List[str]) -> None:
+    """Run a command inside the tiny42 container."""
     if not args or args[0] in ['-h', '--help']:
         show_help()
         return
 
     current_path: str = os.getcwd()
-    relative_path: str = os.path.relpath(current_path, DORKER_WORKSPACE)
+    relative_path: str = os.path.relpath(current_path, TINY42_WORKSPACE)
 
     if not _check_environment():
         return
 
     command: str = ' '.join(args)
-    subprocess.run(['docker', 'exec', '-it', 'dorker', 'bash', '-c',
-                   f"cd '/dorker_workspace/{relative_path}' && {command}"])
+    subprocess.run(['docker', 'exec', '-it', 'tiny42', 'bash', '-c',
+                   f"cd '/tiny42_workspace/{relative_path}' && {command}"])
 
 ```
 
@@ -182,10 +182,10 @@ def open_docker() -> None:
         # Check if Docker is running
         subprocess.run(['docker', 'stats', '--no-stream'],
                       capture_output=True, check=True)
-        print(f"{DORKER_BLUE}Docker is already running{DORKER_WHITE}")
+        print(f"{TINY42_BLUE}Docker is already running{TINY42_WHITE}")
         return
     except subprocess.CalledProcessError:
-        print(f"{DORKER_GREEN}Docker is starting up...{DORKER_WHITE}", end='', flush=True)
+        print(f"{TINY42_GREEN}Docker is starting up...{TINY42_WHITE}", end='', flush=True)
 
         # Open Docker app
         subprocess.run(['open', '-g', '-a', 'Docker'])
@@ -197,7 +197,7 @@ def open_docker() -> None:
                              capture_output=True, check=True)
                 break
             except subprocess.CalledProcessError:
-                print(f"{DORKER_GREEN}.{DORKER_WHITE}", end='', flush=True)
+                print(f"{TINY42_GREEN}.{TINY42_WHITE}", end='', flush=True)
 
 
 def setup_goinfre_docker() -> None:
@@ -207,8 +207,8 @@ def setup_goinfre_docker() -> None:
 
     # Check if Docker is already in goinfre
     if os.path.exists(docker_dest):
-        response: str = input(f"{DORKER_RED}Docker is already setup in {docker_dest}, "
-                        f"do you want to reset it? [y/N]{DORKER_WHITE}\n")
+        response: str = input(f"{TINY42_RED}Docker is already setup in {docker_dest}, "
+                        f"do you want to reset it? [y/N]{TINY42_WHITE}\n")
         if response.lower() == 'y':
             subprocess.run(['rm', '-rf',
                           f"{docker_dest}/com.docker.docker",
@@ -258,22 +258,22 @@ import os
 from typing import Optional
 
 # Fill in the directory name that contains all your 42 projects
-DORKER_WORKSPACE: str = os.path.join(os.environ['HOME'], 'Projects/42berlin')
-DORKER_ECHO_ON_STARTUP: bool = True
+TINY42_WORKSPACE: str = os.path.join(os.environ['HOME'], 'Projects/42berlin')
+TINY42_ECHO_ON_STARTUP: bool = True
 
 # Terminal colors
-DORKER_GREEN = '\033[0;32m'  # Used for success messages
-DORKER_BLUE = '\033[0;36m'   # Used for instructions/guides
-DORKER_RED = '\033[0;31m'    # Used for errors/warnings
-DORKER_WHITE = '\033[0m'
+TINY42_GREEN = '\033[0;32m'  # Used for success messages
+TINY42_BLUE = '\033[0;36m'   # Used for instructions/guides
+TINY42_RED = '\033[0;31m'    # Used for errors/warnings
+TINY42_WHITE = '\033[0m'
 
 # Docker port publishing configuration
 # Set to True to enable port publishing
-DORKER_PORT_PUBLISHING: bool = False
+TINY42_PORT_PUBLISHING: bool = False
 # Host port number (on your machine)
-DORKER_PORT_PUBLISHING_HOST: int = 8080
+TINY42_PORT_PUBLISHING_HOST: int = 8080
 # Container port number (inside Docker)
-DORKER_PORT_PUBLISHING_CONTAINER: int = 8080
+TINY42_PORT_PUBLISHING_CONTAINER: int = 8080
 
 def get_port_mapping() -> Optional[str]:
     """
@@ -282,8 +282,8 @@ def get_port_mapping() -> Optional[str]:
     Returns:
         str: Port mapping in format '-p HOST:CONTAINER' or None if disabled
     """
-    if DORKER_PORT_PUBLISHING:
-        return f'-p {DORKER_PORT_PUBLISHING_HOST}:{DORKER_PORT_PUBLISHING_CONTAINER}'
+    if TINY42_PORT_PUBLISHING:
+        return f'-p {TINY42_PORT_PUBLISHING_HOST}:{TINY42_PORT_PUBLISHING_CONTAINER}'
     return None
 ```
 

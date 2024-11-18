@@ -1,4 +1,4 @@
-"""Docker management utilities for Dorker.
+"""Docker management utilities for tiny42.
 
 This module handles Docker-specific operations like:
 - Starting the Docker daemon
@@ -22,10 +22,10 @@ def open_docker() -> None:
         # Check if Docker is running
         subprocess.run(['docker', 'stats', '--no-stream'], 
                       capture_output=True, check=True)
-        print(f"{DORKER_BLUE}Docker is already running{DORKER_WHITE}")
+        print(f"{TINY42_BLUE}Docker is already running{TINY42_WHITE}")
         return
     except subprocess.CalledProcessError:
-        print(f"{DORKER_GREEN}Docker is starting up...{DORKER_WHITE}", end='', flush=True)
+        print(f"{TINY42_GREEN}Docker is starting up...{TINY42_WHITE}", end='', flush=True)
         
         # Open Docker app
         subprocess.run(['open', '-g', '-a', 'Docker'])
@@ -37,7 +37,7 @@ def open_docker() -> None:
                              capture_output=True, check=True)
                 break
             except subprocess.CalledProcessError:
-                print(f"{DORKER_GREEN}.{DORKER_WHITE}", end='', flush=True)
+                print(f"{TINY42_GREEN}.{TINY42_WHITE}", end='', flush=True)
                 time.sleep(1)
         print()
 
@@ -53,8 +53,8 @@ def setup_goinfre_docker() -> None:
     
     # Check if Docker is already in goinfre
     if os.path.exists(docker_dest):
-        response: str = input(f"{DORKER_RED}Docker is already setup in {docker_dest}, "
-                        f"do you want to reset it? [y/N]{DORKER_WHITE}\n")
+        response: str = input(f"{TINY42_RED}Docker is already setup in {docker_dest}, "
+                        f"do you want to reset it? [y/N]{TINY42_WHITE}\n")
         if response.lower() == 'y':
             subprocess.run(['rm', '-rf', 
                           f"{docker_dest}/com.docker.docker",
@@ -94,4 +94,4 @@ def setup_goinfre_docker() -> None:
         dst = os.path.expanduser(dst)
         os.symlink(src, dst)
 
-    print(f"{DORKER_GREEN}docker is now set up in goinfre{DORKER_WHITE}") 
+    print(f"{TINY42_GREEN}docker is now set up in goinfre{TINY42_WHITE}") 

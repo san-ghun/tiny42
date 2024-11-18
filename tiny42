@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""tiny42 - A Docker-based development environment manager.
+
+This script serves as the main entry point for tiny42, providing a CLI interface
+to manage Docker containers for development environments. It's particularly
+designed for 42 School's development environment needs.
+
+Usage:
+    tiny42 [command] [args...]
+    
+Commands:
+    tiny42              Run a command inside the tiny42 container
+    tiny42-init         Initialize the tiny42 container
+    tiny42-reload       Rebuild and restart the tiny42 container
+    tiny42-open-docker  Start Docker daemon if not running
+    tiny42-goinfre-docker  Setup Docker in goinfre directory (42 School specific)
+"""
+
+import sys
+from pathlib import Path
+
+# Add the config directory to the Python path
+config_dir = Path.home() / '.config' / 'tiny42'
+sys.path.insert(0, str(config_dir))
+
+from src.tiny42 import run_tiny42_command, init_tiny42, reload_tiny42
+from src.docker import open_docker, setup_goinfre_docker
+
+def main() -> None:
+    """Process command line arguments and execute corresponding tiny42 commands.
+    
+    If no arguments are provided, runs an empty command in the container.
+    Otherwise, parses the first argument as a command and passes remaining
+    arguments to the appropriate handler function.
+    
+    Command mapping:
+        tiny42 -> run_tiny42_command
+        tiny42-init -> init_tiny42
+        tiny42-reload -> reload_tiny42
+        tiny42-open-docker -> open_docker
+        tiny42-goinfre-docker -> setup_goinfre_docker
+        
+    Any unrecognized command is treated as a command to be executed
+    inside the container.
+    """
+    if len(sys.argv) < 2:
+        run_tiny42_command([])
+        return
+
+    command = sys.argv[1]
+    args = sys.argv[2:]
+
+    if command == "tiny42":
+        run_tiny42_command(args)
+    elif command == "tiny42-init":
+        init_tiny42()
+    elif command == "tiny42-reload":
+        reload_tiny42()
+    elif command == "tiny42-open-docker":
+        open_docker()
+    elif command == "tiny42-goinfre-docker":
+        setup_goinfre_docker()
+    else:
+        run_tiny42_command([command] + args)
+
+if __name__ == "__main__":
+    main() 
