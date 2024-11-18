@@ -1,4 +1,21 @@
 #!/usr/bin/env python3
+"""Dorker - A Docker-based development environment manager.
+
+This script serves as the main entry point for Dorker, providing a CLI interface
+to manage Docker containers for development environments. It's particularly
+designed for 42 School's development environment needs.
+
+Usage:
+    dorker [command] [args...]
+    
+Commands:
+    dorker              Run a command inside the dorker container
+    dorker-init         Initialize the dorker container
+    dorker-reload       Rebuild and restart the dorker container
+    dorker-open-docker  Start Docker daemon if not running
+    dorker-goinfre-docker  Setup Docker in goinfre directory (42 School specific)
+"""
+
 import sys
 from pathlib import Path
 
@@ -9,7 +26,23 @@ sys.path.insert(0, str(config_dir))
 from src.dorker import run_dorker_command, init_dorker, reload_dorker
 from src.docker import open_docker, setup_goinfre_docker
 
-def main():
+def main() -> None:
+    """Process command line arguments and execute corresponding Dorker commands.
+    
+    If no arguments are provided, runs an empty command in the container.
+    Otherwise, parses the first argument as a command and passes remaining
+    arguments to the appropriate handler function.
+    
+    Command mapping:
+        dorker -> run_dorker_command
+        dorker-init -> init_dorker
+        dorker-reload -> reload_dorker
+        dorker-open-docker -> open_docker
+        dorker-goinfre-docker -> setup_goinfre_docker
+        
+    Any unrecognized command is treated as a command to be executed
+    inside the container.
+    """
     if len(sys.argv) < 2:
         run_dorker_command([])
         return
