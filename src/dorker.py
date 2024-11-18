@@ -1,3 +1,11 @@
+"""Core functionality for Dorker.
+
+This module provides the main functionality for:
+- Running commands inside Docker containers
+- Managing container lifecycle
+- Initializing and reloading containers
+"""
+
 import os
 import subprocess
 from pathlib import Path
@@ -7,7 +15,16 @@ from .docker import open_docker, setup_goinfre_docker
 from .settings import get_port_mapping
 
 def _check_environment() -> bool:
-    """Check if we're in the correct workspace and Docker is running."""
+    """Verify the execution environment is valid.
+    
+    Checks:
+    - Current directory is within configured workspace
+    - Docker is running
+    - Dorker container exists and is running
+    
+    Returns:
+        bool: True if environment is valid, False otherwise
+    """
     current_path: str = os.getcwd()
     
     if current_path == DORKER_WORKSPACE:
@@ -42,7 +59,14 @@ def _check_environment() -> bool:
     return True
 
 def run_dorker_command(args: List[str]) -> None:
-    """Run a command inside the dorker container."""
+    """Execute a command inside the Dorker container.
+    
+    Args:
+        args: List of command arguments to execute
+        
+    The command is executed in the same relative path inside the container
+    as the current working directory is to DORKER_WORKSPACE.
+    """
     if not args or args[0] in ['-h', '--help']:
         show_help()
         return
@@ -58,7 +82,13 @@ def run_dorker_command(args: List[str]) -> None:
                    f"cd '/dorker_workspace/{relative_path}' && {command}"])
 
 def init_dorker() -> None:
-    """Initialize the dorker container."""
+    """Initialize the Dorker container environment.
+    
+    - Prompts for goinfre setup if needed
+    - Ensures Docker is running
+    - Builds container image if needed
+    - Creates and starts container with proper volume mounts
+    """
     response: str = input(f"{DORKER_RED}Dorker wants to know if you want to setup "
                     f"Docker inside goinfre. Do you want to setup Docker within "
                     f"goinfre? [y/N]{DORKER_WHITE}\n")
@@ -97,7 +127,13 @@ def init_dorker() -> None:
         print(f"{DORKER_RED}Failed to build the dorker image{DORKER_WHITE}")
 
 def reload_dorker() -> None:
-    """Rebuild and restart the dorker container."""
+    """Rebuild and restart the Dorker container.
+    
+    - Rebuilds the container image
+    - Stops and removes existing container
+    - Creates new container with updated image
+    - Maintains same volume mounts and port mappings
+    """
     open_docker()
     
     dockerfile_path: Path = Path(__file__).parent / 'Dockerfile'

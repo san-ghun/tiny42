@@ -6,6 +6,17 @@ from pathlib import Path
 from typing import List, Union
 
 def install_dorker() -> int:
+    """Install Dorker to the user's system.
+    
+    This function:
+    - Creates necessary directories in ~/.local/bin and ~/.config/dorker
+    - Copies source files and Dockerfile to config directory
+    - Makes the main dorker script executable
+    - Adds ~/.local/bin to PATH in shell RC files if needed
+    
+    Returns:
+        int: 0 for success, 1 for failure
+    """
     # Get the absolute path of the installation directory
     install_dir: Path = Path(__file__).parent.absolute()
     
@@ -62,6 +73,16 @@ def install_dorker() -> int:
     return 0
 
 def uninstall_dorker() -> int:
+    """Remove Dorker from the user's system.
+    
+    This function:
+    - Removes the dorker executable from ~/.local/bin
+    - Removes the dorker config directory
+    - Note: Does not remove PATH entries from shell RC files
+    
+    Returns:
+        int: 0 for success, 1 for failure
+    """
     home: Path = Path.home()
     bin_dir: Path = home / '.local' / 'bin'
     config_dir: Path = home / '.config' / 'dorker'

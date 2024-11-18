@@ -1,3 +1,11 @@
+"""Configuration settings for Dorker.
+
+This module contains all configurable settings for Dorker including:
+- Workspace directory path
+- Terminal colors for output
+- Docker port publishing configuration
+"""
+
 import os
 from typing import Optional
 
@@ -20,11 +28,11 @@ DORKER_PORT_PUBLISHING_HOST: int = 8080
 DORKER_PORT_PUBLISHING_CONTAINER: int = 8080
 
 def get_port_mapping() -> Optional[str]:
-    """
-    Returns the port mapping string for Docker if port publishing is enabled.
+    """Get Docker port mapping string if enabled.
     
     Returns:
-        str: Port mapping in format '-p HOST:CONTAINER' or None if disabled
+        Optional[str]: Port mapping in format '-p HOST:CONTAINER' if enabled,
+                      None if port publishing is disabled
     """
     if DORKER_PORT_PUBLISHING:
         return f'-p {DORKER_PORT_PUBLISHING_HOST}:{DORKER_PORT_PUBLISHING_CONTAINER}'

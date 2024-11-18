@@ -1,3 +1,10 @@
+"""Docker management utilities for Dorker.
+
+This module handles Docker-specific operations like:
+- Starting the Docker daemon
+- Setting up Docker in goinfre (for 42 School)
+- Managing Docker container lifecycle
+"""
 import os
 import time
 import subprocess
@@ -5,7 +12,12 @@ from typing import List
 from .settings import *
 
 def open_docker() -> None:
-    """Open Docker application and wait for it to start."""
+    """Start Docker daemon if not running.
+    
+    - Checks if Docker daemon is running
+    - Launches Docker application if needed
+    - Waits for Docker to be fully started
+    """
     try:
         # Check if Docker is running
         subprocess.run(['docker', 'stats', '--no-stream'], 
@@ -30,7 +42,12 @@ def open_docker() -> None:
         print()
 
 def setup_goinfre_docker() -> None:
-    """Setup Docker in goinfre directory."""
+    """Configure Docker to use goinfre directory (42 School specific).
+    
+    - Creates Docker directories in /goinfre/<user>/docker
+    - Sets up proper symlinks for Docker configuration
+    - Handles existing installations and prompts for reset
+    """
     user: str = os.environ['USER']
     docker_dest: str = f"/goinfre/{user}/docker"
     
