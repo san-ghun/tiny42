@@ -14,7 +14,7 @@ __dorker-check()
     if [ $( docker images -q dorker 2> /dev/null | wc -l ) -eq 0 ]; then
       dorker-init
     else
-      docker run -itd -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker
+      docker run -itd p 8080:8080 -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker
     fi
   fi
   return 0
@@ -69,7 +69,7 @@ dorker-init() {
       local dockerfile=$(dirname "$(type $0 | awk '{ print $7 }')")/Dockerfile
       chmod 755 $dockerfile
       docker build . -t dorker -f $dockerfile &&
-      docker run -itd -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker > /dev/null ||
+      docker run -itd -p 8080:8080 -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker > /dev/null ||
         echo -e $DORKER_RED"Failed to build the dorker image"$DORKER_WHITE
     fi
   fi
@@ -81,6 +81,6 @@ dorker-reload() {
   docker build . -t dorker -f $(dirname "$(type $0 | awk '{ print $7 }')")/Dockerfile
   docker stop dorker > /dev/null
   docker rm dorker > /dev/null
-  docker run -itd -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker > /dev/null &&
+  docker run -itd -p 8080:8080 -v $DORKER_WORKSPACE:/dorker_workspace --name=dorker dorker > /dev/null &&
   echo -e $DORKER_GREEN"Dorker is reloaded and restarted"$DORKER_WHITE
 }
