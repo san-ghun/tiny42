@@ -1,8 +1,10 @@
 # tiny42 - Docker Development Environment Manager
 
+> Inspired from the [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang)
+
 ## Overview
 
-tiny42 is a Python-based tool that provides a consistent Docker environment for C/C++ development, particularly useful for 42 School projects. It allows developers to run Linux-specific tools (like valgrind and strace) on macOS through a seamless Docker interface.
+`tiny42` is a Python-based tool that provides a consistent Docker environment for C/C++ development, particularly useful for 42 School projects. It allows developers to run Linux-specific tools (like valgrind and strace) on macOS through a seamless Docker interface.
 
 ## Key Features
 
@@ -103,6 +105,10 @@ The container includes:
 ## Uninstallation
 
 ```bash
+# Move to the cloned directory
+cd tiny42
+
+# Execute install script with --uninstall flag
 python3 install.py --uninstall
 ```
 
@@ -301,6 +307,6 @@ This project is licensed under the MIT License.
 
 ## Acknowledgments
 
+- Started by forking the repository from [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang)
 - Originally designed for 42 School's development environment needs
 - Refactored from shell scripts to Python for improved maintainability
-- Community contributions and feedback
