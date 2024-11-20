@@ -27,13 +27,13 @@ def _check_environment() -> bool:
     """
     current_path: str = os.getcwd()
     
-    # TODO: Edit relative path logic to statically use TINY42_WORKSPACE
-    if current_path == TINY42_WORKSPACE:
+    # Check if current path is within workspace
+    if not current_path.startswith(TINY42_WORKSPACE):
         print(f"{TINY42_RED}You are not inside the workspace specified.{TINY42_WHITE}")
         print(f"{TINY42_BLUE}tiny42 can only be ran inside the specified workspace, "
               f"currently it is set to \"{TINY42_WORKSPACE}\".{TINY42_WHITE}")
         return False
-
+    
     # Check if tiny42 container is running
     try:
         output: str = subprocess.check_output(['docker', 'ps'], text=True)
@@ -72,11 +72,8 @@ def run_tiny42_command(args: List[str]) -> None:
         show_help()
         return
 
-    # TODO: Edit relative path logic to statically use TINY42_WORKSPACE
     current_path: str = os.getcwd()
-    print(current_path)
     relative_path: str = os.path.relpath(current_path, TINY42_WORKSPACE)
-    print(relative_path)
     
     if not _check_environment():
         return
