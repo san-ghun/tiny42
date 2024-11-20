@@ -93,7 +93,8 @@ The container includes:
 - readline development libraries
 
 > [!WARNING]
-> Docker enables you to code and compile your results, but CANNOT display graphical projects, such as fract-ol, FdF, so_long, cub3d, miniRT.
+> *Docker* enables you to code and compile your results.   
+> But it **CANNOT** display graphical projects, such as *fract-ol*, *FdF*, *so_long*, *cub3d*, *miniRT*.
 
 ## Project Structure
 
@@ -153,7 +154,14 @@ This project is licensed under the MIT License.
 - Originally designed for 42 School's development environment needs
 - Refactored from shell scripts to Python for improved maintainability
 
-### Backstory
+## Backstory
 
-I am a student of 42Berlin. I love the space and people. However, my biggest concern was the commute from my place to the cluster, which takes a total of 4 hours a day. On top of that, my working hours are irregular, so being at the 42Berlin cluster was and still is diffcult for me. I installed Ubuntu on my machines but it wasn't smooth and didn't fit with my daily usage. Since I rely heavily on `gdb` and `valgrind` in my projects, I needed a solution to improve my setup. Then I found the [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang) (big thanks!) and used it for a while. I didn't have any problems using it by myself, but I did have problem when collaborating on a webserv project with my peers. So I forked the Dorker repository and started converting Bash scripts into Python3 code, and here we are. It still needs a lot of improvements and bug fixes. But I am really enjoying the process.
+I am a student of 42Berlin. I love the space and people. However, my biggest concern was the commute from my place to the cluster, which takes a total of 4 hours a day. On top of that, my working hours are irregular, so being at the 42Berlin cluster was and still is diffcult for me. 
+
+I installed Ubuntu on my machines but it wasn't smooth and didn't fit with my daily usage. Since I rely heavily on `gdb` and `valgrind` in my projects, I needed a solution to improve my setup. 
+
+Then I found the [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang) (big thanks!) and used it for a while. I didn't have any problems using it by myself, but I did have some difficulties when collaborating on the `webserv` project with my peers. 
+
+So I forked the Dorker repository and started converting Bash scripts into Python3 code, and here we are. It still needs a lot of improvements and bug fixes. But I am really enjoying the process.
+
 I hope `tiny42` will help my peers who are experiencing the same issues as me.
