@@ -29,17 +29,17 @@ from src.docker import open_docker, setup_goinfre_docker
 def main() -> None:
     """Process command line arguments and execute corresponding tiny42 commands.
     
-    If no arguments are provided, runs an empty command in the container.
-    Otherwise, parses the first argument as a command and passes remaining
+    If no command-line arguments are provided, runs an empty command in the container.
+    Otherwise, parses the first argument as a command and passes any remaining
     arguments to the appropriate handler function.
     
     Command mapping:
-        tiny42 -> run_tiny42_command
-        tiny42-init -> init_tiny42
-        tiny42-reload -> reload_tiny42
-        tiny42-open-docker -> open_docker
-        tiny42-goinfre-docker -> setup_goinfre_docker
-        
+        --init or -i          -> init_tiny42
+        --reload or -r        -> reload_tiny42
+        --open-docker or -o   -> open_docker
+        --goinfre-docker or -g -> setup_goinfre_docker
+        Any other command     -> run_tiny42_command with the command and additional arguments
+    
     Any unrecognized command is treated as a command to be executed
     inside the container.
     """
@@ -50,15 +50,13 @@ def main() -> None:
     command = sys.argv[1]
     args = sys.argv[2:]
 
-    if command == "tiny42":
-        run_tiny42_command(args)
-    elif command == "tiny42-init":
+    if command in ("--init", "-i"):
         init_tiny42()
-    elif command == "tiny42-reload":
+    elif command in ("--reload", "-r"):
         reload_tiny42()
-    elif command == "tiny42-open-docker":
+    elif command in ("--open-docker", "-o"):
         open_docker()
-    elif command == "tiny42-goinfre-docker":
+    elif command in ("--goinfre-docker", "-g"):
         setup_goinfre_docker()
     else:
         run_tiny42_command([command] + args)
