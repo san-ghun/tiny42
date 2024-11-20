@@ -67,17 +67,21 @@ def run_tiny42_command(args: List[str]) -> None:
         
     The command is executed in the same relative path inside the container
     as the current working directory is to TINY42_WORKSPACE.
+    
+    Special cases:
+        - Empty args list: shows help message
+        - First arg is -h or --help: shows help message
     """
-    if not args or args[0] in ['-h', '--help']:
+    if not args or args[0] in ("--help", "-h"):
         show_help()
+        return
+
+    if not _check_environment():
         return
 
     current_path: str = os.getcwd()
     relative_path: str = os.path.relpath(current_path, TINY42_WORKSPACE)
     
-    if not _check_environment():
-        return
-
     command: str = ' '.join(args)
     subprocess.run(['docker', 'exec', '-it', 'tiny42', 'bash', '-c',
                    f"cd '/tiny42_workspace/{relative_path}' && {command}"])
@@ -157,18 +161,27 @@ def reload_tiny42() -> None:
     print(f"{TINY42_GREEN}tiny42 is reloaded and restarted{TINY42_WHITE}")
 
 def show_help() -> None:
-    """Show help message."""
-    print(f"{TINY42_BLUE}\ntiny42 is configured to run only inside {TINY42_WORKSPACE}")
-    print("Change settings in src/settings.py")
-    print("Change Dockerfile in src/Dockerfile\n")
-    print("Available commands:\n")
-    print("tiny42 <commands>        Execute any command inside the \"tiny42\" container.")
-    print("tiny42-reload           Rebuild the tiny42 container.")
-    print("tiny42-init            Built and start the docker container called \"tiny42\".")
-    print("tiny42-open-docker     Open docker from the command line.")
-    print("tiny42-goinfre-docker  Setup docker inside the goinfre directory.")
+    """Show help message with available commands and configuration info."""
+    print(f"{TINY42_BLUE}\ntiny42 - A Docker-based development environment manager")
+    print(f"\nKeep on coding with your portable 42")
+    print(f"\nConfiguration:")
+    print(f"  Workspace: {TINY42_WORKSPACE}")
+    print("  Settings: ~/.config/tiny42/src/settings.py")
+    print("  Dockerfile: ~/.config/tiny42/src/Dockerfile")
+    
+    print("\nUsage:")
+    print("  tiny42 [command] [args...]")
+    
+    print("\nCommands:")
+    print("  tiny42 <command>       Execute command inside the tiny42 container")
+    print("  --init, -i             Initialize the tiny42 container")
+    print("  --reload, -r           Rebuild and restart the tiny42 container")
+    print("  --open-docker, -o      Start Docker daemon if not running")
+    print("  --goinfre-docker, -g   Setup Docker in goinfre directory (42 School specific)")
+    print("  --help, -h             Show this help message")
     
     if TINY42_PORT_PUBLISHING:
-        print(f"\nPort Publishing: Host port {TINY42_PORT_PUBLISHING_HOST} -> "
-              f"Container port {TINY42_PORT_PUBLISHING_CONTAINER}")
+        print(f"\nPort Publishing:")
+        print(f"  Host port {TINY42_PORT_PUBLISHING_HOST} -> Container port {TINY42_PORT_PUBLISHING_CONTAINER}")
+    
     print(f"{TINY42_WHITE}")
