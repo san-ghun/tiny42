@@ -52,7 +52,7 @@ def install_tiny42() -> int:
             home / '.bashrc',
         ]
         
-        path_export: str = f'\nexport PATH="$PATH:{bin_dir}"\n'
+        path_export: str = f'\nexport PATH="{bin_dir}:$PATH"\n'
         
         for rc_file in shell_rc_files:
             if rc_file.exists():
