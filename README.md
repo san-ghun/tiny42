@@ -1,4 +1,4 @@
-# tiny42 - Docker Development Environment Manager
+# tiny42 - Keep on coding with your portable 42
 
 > Inspired from the [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang)
 
@@ -59,21 +59,27 @@ To enable port forwarding between your host machine and container:
 
 ```bash
 # Execute commands in container
-tiny42 <command>
+tiny42 [command] [args...]
 
 # Examples
 tiny42 make re
 tiny42 valgrind --leak-check=full ./program
 tiny42 gcc -Wall -Wextra -Werror main.c
+tiny42 "cd ./webserv ; cat webserv.conf | grep location"
 
 # Open shell in container
 tiny42 bash
 
 # Management commands
-tiny42-init           # Initialize container
-tiny42-reload         # Rebuild container
-tiny42-open-docker    # Start Docker daemon
-tiny42-goinfre-docker # Setup Docker in goinfre (42 School)
+--init, -i             # Initialize the tiny42 container
+--reload, -r           # Rebuild and restart the tiny42 container
+--open-docker, -o      # Start Docker daemon if not running
+--goinfre-docker, -g   # Setup Docker in goinfre directory (42 School specific)
+--help, -h             # Show help message
+
+# Examples with flags
+tiny42 --init
+tiny42 -r              # Short form for reload
 ```
 
 ### Development Environment
@@ -85,6 +91,9 @@ The container includes:
 - Git
 - Additional utilities (bat, jq)
 - readline development libraries
+
+> [!WARNING]
+> Docker enables you to code and compile your results, but CANNOT display graphical projects, such as fract-ol, FdF, so_long, cub3d, miniRT.
 
 ## Project Structure
 
