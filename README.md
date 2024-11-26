@@ -154,6 +154,9 @@ This project is licensed under the MIT License.
 - Originally designed for 42 School's development environment needs
 - Refactored from shell scripts to Python for improved maintainability
 
+> [!TIP]
+> For advanced users who want more customizable and functional Docker usage, such as docker-compose and k8s, I personally recommend checking out [OrbStack](https://docs.orbstack.dev/).
+
 ## Backstory
 
 I am a student of 42Berlin. I love the space and people. However, my biggest concern was the commute from my place to the cluster, which takes a total of 4 hours a day. On top of that, my working hours are irregular, so being at the 42Berlin cluster was and still is diffcult for me. 
