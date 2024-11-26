@@ -1,4 +1,4 @@
-# tiny42 - Keep on coding with your portable 42
+# tiny42 - Keep coding with your portable 42
 
 > Inspired from the [Dorker](https://github.com/Scarletsang/Dorker) by [Scarletsang](https://github.com/Scarletsang)
 
