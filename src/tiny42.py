@@ -163,7 +163,7 @@ def reload_tiny42() -> None:
 def show_help() -> None:
     """Show help message with available commands and configuration info."""
     print(f"{TINY42_BLUE}\ntiny42 - A Docker-based development environment manager")
-    print(f"\nKeep on coding with your portable 42")
+    print(f"\nKeep coding with your portable 42")
     print(f"\nConfiguration:")
     print(f"  Workspace: {TINY42_WORKSPACE}")
     print("  Settings: ~/.config/tiny42/src/settings.py")
